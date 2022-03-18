@@ -1,0 +1,36 @@
+
+import PySimpleGUI as sg
+
+sg.set_options(text_color='black', titlebar_font='Helvetica bold 20', font='Courier 14')
+sg.theme('SandyBeach')
+
+nutri = ['Well Nourished', 'Undernourished', 'Balanced', 'Vitamin Deficiencies']
+weight_cat = ['Obese', 'Overweight', 'Normal weight', 'Underweight']
+
+layout = [[sg.T('Dependent drop down and bindings')],
+          [sg.T()],
+          [sg.T('Patient weight', size=(20, 1)),
+           sg.Combo(values=weight_cat,default_value=['Balanced'], key='-WEIGHT-')],
+
+          [sg.T()],
+          [sg.T('Nutrition status', size=(20, 1)),
+           sg.Combo(values=nutri,default_value=[], key='-NUTRIENTS-')],
+
+          ]
+window = sg.Window('Patient weight',layout, resizable=True, size=(500, 400))
+
+#questions#1. How do I bind a selected combo item in 'Patient weight' to a specific item in 'Nutrition status'?
+#question#2. How can I present a blank combo area and only to be filled once the select command has been triggered?
+def pickItem(e):
+    if window['-WEIGHT-'].get()=='Balanced':
+        window['-NUTRIENTS-'].update('Normal weight')
+window['-WEIGHT-'].bind(<<ComboSelected>>, pickItem)
+
+
+
+while True:
+    event, values = window.read()
+    if event == sg.WIN_CLOSED:
+        break
+
+window.close()
